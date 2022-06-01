@@ -46,7 +46,7 @@
         <div>
           <div class="btns">
             <input type="button" onclick="openModal()" value="削除" class="basic_btn">
-            <input type="button" onclick="location.href='./updateInput.html'" value="編集" class="basic_btn">
+            <input type="button" th:onclick="|location.href='/updateInput/${product.id}'|" value="編集" class="basic_btn">
             <input type="button" onclick="location.href='/menu'" value="戻る" class="cancel_btn">
           </div>
           <div id="modal">

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.dao.CategoryDao;
 import com.example.demo.dao.ProductDao;
 import com.example.demo.entity.Product;
 import com.example.demo.form.ProductForm;
@@ -22,6 +23,8 @@ public class IndexController {
 	
 	@Autowired
 	ProductDao productDao;
+	@Autowired
+	CategoryDao categoryDao;
 	
 	@RequestMapping(value = "/index")
 	public String index(Model model) {
@@ -44,6 +47,8 @@ public class IndexController {
 	
 	@GetMapping("/insert")
 	public String insert(Model model) {
+		var categoryList = categoryDao.findAll();
+		model.addAttribute("categoryList", categoryList);
 		return "insert";
 	}
 	
@@ -64,6 +69,25 @@ public class IndexController {
 		return "menu";
 	}
 	
+	@RequestMapping(value = "/update", params = "update", method = RequestMethod.POST)
+	public String update(@Validated @ModelAttribute("productForm") ProductForm pForm, BindingResult bindingResult ,Model model) {
+		if(bindingResult.hasErrors()) {
+			return "/insert";
+		}
+		var product = new Product();
+//		product.setId(pForm.getId)
+		product.setName(pForm.getName());
+		product.setPrice(pForm.getPrice());
+		product.setProductId(pForm.getProductId());
+		product.setCategoryId(pForm.getCategoryId());
+		product.setDescription(pForm.getDescription());
+		productDao.update(product);
+		var list = productDao.find("");
+		model.addAttribute("productList", list);
+		return "menu";
+	}
+	
+	
 	@GetMapping("/detail/{id}")
 	public String detail(@PathVariable("id") int id, Model model) {
 		var product = productDao.findById(id);
@@ -73,11 +97,17 @@ public class IndexController {
 	
 	@RequestMapping(value = "/update", params = "delete", method = RequestMethod.POST)
 	public String delete(@RequestParam("id") int id, Model model) {
-//		int idNum = Integer.parseInt(id);
 		productDao.delete(id);
 		var list = productDao.find("");
 		model.addAttribute("productList", list);
 		return "menu";
+	}
+	
+	@GetMapping("/updateInput/{id}")
+	public String updateInput(@PathVariable("id") int id, Model model) {
+		var product = productDao.findById(id);
+		model.addAttribute("product", product);
+		return "updateInput";
 	}
 	
 }

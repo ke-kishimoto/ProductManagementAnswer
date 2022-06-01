@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>更新</title>
-<link href="css/commons.css" rel="stylesheet">
+<link href="/css/commons.css" rel="stylesheet">
 </head>
 <body>
   <div th:insert="header"></div>
@@ -14,7 +14,7 @@
     <div class="form_body">
       <p class="error">エラーメッセージ</p>
 
-      <form action="menu.html" method="get">
+      <form action="/update" method="post">
         <fieldset class="label-130">
           <div>
             <label>商品ID</label>
@@ -58,7 +58,7 @@
           <div id="modal">
             <p class="modal_message">更新しますか？</p>
             <div class="btns">
-              <button type="submit" class="basic_btn">更新</button>
+              <button type="submit" name="update" class="basic_btn">更新</button>
               <button type="button" onclick="closeModal()" class="cancel_btn">キャンセル</button>
             </div>
           </div>
@@ -68,4 +68,4 @@
   <div id="fadeLayer"></div>
 </body>
 </html>
-<script src="./js/commons.js"></script>
+<script src="/js/commons.js"></script>

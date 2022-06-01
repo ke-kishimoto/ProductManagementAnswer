@@ -14,7 +14,7 @@ import com.example.demo.entity.Product;
 public class ProductDao {
 
 	@Autowired
-	NamedParameterJdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate jdbcTemplate;
 	
 	public List<Product> find(String keyword) {
 		

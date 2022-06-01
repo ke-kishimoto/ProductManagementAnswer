@@ -41,11 +41,9 @@
           <div class="select_block">
             <label class="required">カテゴリ</label>
             <select name="categoryId" class="base-text">
-              <option value="1">筆記具</option>
-              <option value="2">紙製品</option>
-              <option value="3">事務消耗品</option>
-              <option value="4">オフィス機器</option>
-              <option value="5">雑貨</option>
+              <option th:each="category : ${categoryList}" 
+              th:value="${category.id}" th:text="${category.name}">
+              </option>
             </select>
           </div>
           <div>

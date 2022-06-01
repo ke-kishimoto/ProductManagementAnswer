@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>ログイン</title>
@@ -14,7 +14,7 @@
     <img src="./images/logo.png" class="login_logo">
     <p class="error">エラーメッセージ</p>
 
-    <form action="/menu" method="post">
+    <form action="/menu" method="post" th:object="${loginForm}">
       <fieldset>
         <div class="cp_iptxt">
           <input class="base_input" type="text" name="loginId" placeholder="ID">
@@ -23,7 +23,7 @@
         </div>
 
         <div>
-          <input class="base_input" type="password" name="pass" placeholder="PASS">
+          <input class="base_input" type="password" name="password" placeholder="PASS">
           <div class="error">エラーメッセージ</div>
         </div>
       </fieldset>

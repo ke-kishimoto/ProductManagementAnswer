@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.dao.CategoryDao;
 import com.example.demo.dao.ProductDao;
+import com.example.demo.dao.UserDao;
 import com.example.demo.entity.Product;
+import com.example.demo.form.LoginForm;
 import com.example.demo.form.ProductForm;
 
 @Controller
@@ -25,14 +27,29 @@ public class IndexController {
 	ProductDao productDao;
 	@Autowired
 	CategoryDao categoryDao;
+	@Autowired
+	UserDao userDao;
 	
 	@RequestMapping(value = "/index")
 	public String index(Model model) {
 		return "index";
 	}
 	
+	@RequestMapping(value="/logout")
+	public String logout() {
+		// TODO セッション破棄
+		return "index";
+	}
+	
 	@RequestMapping(value = "/menu")
-	public String menu(Model model) {
+	public String menu(@Validated @ModelAttribute("loginForm") LoginForm loginForm, BindingResult bindingResult, Model model) {
+		if(bindingResult.hasErrors()) {
+			return "/index";
+		}
+		var user = userDao.login(loginForm.getLoginId(), loginForm.getPassword());
+		if (user == null) {
+			return "/index";
+		}
 		var list = productDao.find("");
 		model.addAttribute("productList", list);
 		return "menu";
@@ -74,15 +91,17 @@ public class IndexController {
 		if(bindingResult.hasErrors()) {
 			return "/insert";
 		}
+//		System.out.println("update");
 		var product = new Product();
-//		product.setId(pForm.getId)
+		product.setId(pForm.getId());
 		product.setName(pForm.getName());
 		product.setPrice(pForm.getPrice());
 		product.setProductId(pForm.getProductId());
 		product.setCategoryId(pForm.getCategoryId());
 		product.setDescription(pForm.getDescription());
-		productDao.update(product);
+		var count = productDao.update(product);
 		var list = productDao.find("");
+//		System.out.println(count);
 		model.addAttribute("productList", list);
 		return "menu";
 	}

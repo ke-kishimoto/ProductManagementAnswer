@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class ProductForm {
 	
+	private int id;
 	@NotBlank
 	private String productId;
 	@NotBlank

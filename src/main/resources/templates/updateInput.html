@@ -8,14 +8,13 @@
 <body>
   <div th:insert="header"></div>
 
-  <hr>
-
   <div class="insert">
     <div class="form_body">
       <p class="error">エラーメッセージ</p>
 
       <form action="/update" method="post">
         <fieldset class="label-130">
+        	<input type="hidden" name="id" th:value="${product.id}">
           <div>
             <label>商品ID</label>
             <input type="text" name="productId" th:value="${product.productId}" class="base-text">

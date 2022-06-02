@@ -111,21 +111,12 @@ public class IndexController {
 		}
 		
 		var product = new Product();
-		product.setName(pForm.getName());
-		product.setPrice(pForm.getPrice());
-		product.setProductId(pForm.getProductId());
-		product.setCategoryId(pForm.getCategoryId());
-		product.setDescription(pForm.getDescription());
+		this.FormToProduct(pForm, product);
 		var count = productDao.insert(product);
+		this.setMsg(model, "登録", count);
 		
-		if(count == 0) {
-			model.addAttribute("msg", "登録に失敗しました。");
-		} else {
-			model.addAttribute("msg", "登録に成功しました。");
-		}
+		model.addAttribute("productList", productDao.find(""));
 		
-		var list = productDao.find("");
-		model.addAttribute("productList", list);
 		return "menu";
 	}
 	
@@ -146,21 +137,12 @@ public class IndexController {
 		}
 		var product = new Product();
 		product.setId(pForm.getId());
-		product.setName(pForm.getName());
-		product.setPrice(pForm.getPrice());
-		product.setProductId(pForm.getProductId());
-		product.setCategoryId(pForm.getCategoryId());
-		product.setDescription(pForm.getDescription());
+		this.FormToProduct(pForm, product);
 		var count = productDao.update(product);
+		this.setMsg(model, "更新", count);
 		
-		if(count == 0) {
-			model.addAttribute("msg", "更新に失敗しました。");
-		} else {
-			model.addAttribute("msg", "更新に成功しました。");
-		}
+		model.addAttribute("productList", productDao.find(""));
 		
-		var list = productDao.find("");
-		model.addAttribute("productList", list);
 		return "/menu";
 	}
 	
@@ -169,8 +151,7 @@ public class IndexController {
 	 */
 	@GetMapping("/detail/{id}")
 	public String detail(@PathVariable("id") int id, Model model) {
-		var product = productDao.findById(id);
-		model.addAttribute("product", product);
+		model.addAttribute("product", productDao.findById(id));
 		return "detail";
 	}
 	
@@ -180,13 +161,8 @@ public class IndexController {
 	@RequestMapping(value = "/update", params = "delete", method = RequestMethod.POST)
 	public String delete(@RequestParam("id") int id, Model model) {
 		var count = productDao.delete(id);
-		if(count == 0) {
-			model.addAttribute("msg", "削除に失敗しました。");
-		} else {
-			model.addAttribute("msg", "削除に成功しました。");
-		}
-		var list = productDao.find("");
-		model.addAttribute("productList", list);
+		this.setMsg(model, "削除", count);
+		model.addAttribute("productList", productDao.find(""));
 		return "menu";
 	}
 	
@@ -196,7 +172,6 @@ public class IndexController {
 	@GetMapping("/updateInput/{id}")
 	public String updateInput(@ModelAttribute("productForm") ProductForm pForm, @PathVariable("id") int id, Model model) {
 		var product = productDao.findById(id);
-//		model.addAttribute("product", product);
 		pForm.setId(product.getId());
 		pForm.setName(product.getName());
 		pForm.setPrice(product.getPrice());
@@ -207,6 +182,22 @@ public class IndexController {
 		model.addAttribute("categoryList", categoryDao.findAll());
 		
 		return "updateInput";
+	}
+	
+	private void FormToProduct(ProductForm pForm, Product product) {
+		product.setName(pForm.getName());
+		product.setPrice(pForm.getPrice());
+		product.setProductId(pForm.getProductId());
+		product.setCategoryId(pForm.getCategoryId());
+		product.setDescription(pForm.getDescription());
+	}
+	
+	private void setMsg(Model model, String mode, int count) {
+		if(count == 0) {
+			model.addAttribute("msg", mode + "に失敗しました。");
+		} else {
+			model.addAttribute("msg", mode + "に成功しました。");
+		}
 	}
 	
 }

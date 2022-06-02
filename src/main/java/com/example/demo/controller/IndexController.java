@@ -30,13 +30,13 @@ public class IndexController {
 	@Autowired
 	UserDao userDao;
 	
-	@RequestMapping(value = "/index")
-	public String index(Model model) {
+	@RequestMapping(value = {"/", "/index"})
+	public String index(@ModelAttribute("loginForm") LoginForm loginForm, Model model) {
 		return "index";
 	}
 	
 	@RequestMapping(value="/logout")
-	public String logout() {
+	public String logout(@ModelAttribute("loginForm") LoginForm loginForm) {
 		// TODO セッション破棄
 		return "index";
 	}
@@ -48,6 +48,7 @@ public class IndexController {
 		}
 		var user = userDao.login(loginForm.getLoginId(), loginForm.getPassword());
 		if (user == null) {
+			model.addAttribute("errorMsg", "IDまたはパスワードが不正です。");
 			return "/index";
 		}
 		var list = productDao.find("");

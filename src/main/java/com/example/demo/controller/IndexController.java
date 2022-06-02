@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +31,8 @@ public class IndexController {
 	CategoryDao categoryDao;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	HttpSession session;  
 	
 	/*  
 	 * トップページへの遷移
@@ -43,7 +47,7 @@ public class IndexController {
 	 */
 	@RequestMapping(value="/logout")
 	public String logout(@ModelAttribute("loginForm") LoginForm loginForm) {
-		// TODO セッション破棄
+		session.invalidate();
 		return "index";
 	}
 	
@@ -60,6 +64,7 @@ public class IndexController {
 			model.addAttribute("errorMsg", "IDまたはパスワードが不正です。");
 			return "/index";
 		}
+		session.setAttribute("user", user);
 		var list = productDao.find("");
 		model.addAttribute("productList", list);
 		return "menu";
@@ -104,13 +109,13 @@ public class IndexController {
 			return "/insert";
 		}
 		// 存在チェック
-		var user = productDao.findByProductId(pForm.getProductId(), -1);
-		if(user != null) {
+		var product = productDao.findByProductId(pForm.getProductId(), -1);
+		if(product != null) {
 			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
 			return "/insert";
 		}
 		
-		var product = new Product();
+		product = new Product();
 		this.FormToProduct(pForm, product);
 		var count = productDao.insert(product);
 		this.setMsg(model, "登録", count);
@@ -129,13 +134,13 @@ public class IndexController {
 			return "/updateInput";
 		}
 		// 存在チェック
-		var user = productDao.findByProductId(pForm.getProductId(), pForm.getId());
-		if(user != null) {
+		var product = productDao.findByProductId(pForm.getProductId(), pForm.getId());
+		if(product != null) {
 			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
 			model.addAttribute("categoryList", categoryDao.findAll());
 			return "/updateInput";
 		}
-		var product = new Product();
+		product = new Product();
 		product.setId(pForm.getId());
 		this.FormToProduct(pForm, product);
 		var count = productDao.update(product);

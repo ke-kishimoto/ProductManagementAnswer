@@ -65,8 +65,7 @@ public class IndexController {
 			return "/index";
 		}
 		session.setAttribute("user", user);
-		var list = productDao.find("");
-		model.addAttribute("productList", list);
+		model.addAttribute("productList", productDao.find(""));
 		return "menu";
 	}
 	
@@ -75,9 +74,16 @@ public class IndexController {
 	 */
 	@RequestMapping(value = "/menu")
 	public String menu(Model model) {
-		var list = productDao.find("");
-		model.addAttribute("productList", list);
+		model.addAttribute("productList", productDao.find(""));
 		return "menu";
+	}
+	
+	/*
+	 * メニュー画面への遷移
+	 */
+	@RequestMapping(value = "/menu2")
+	public String menu2(Model model) {
+		return "menu2";
 	}
 	
 	/*
@@ -85,8 +91,7 @@ public class IndexController {
 	 */
 	@RequestMapping(value = "/search")
 	public String search(@RequestParam("keyword") String keyword ,Model model) {
-		var list = productDao.find(keyword);
-		model.addAttribute("productList", list);
+		model.addAttribute("productList", productDao.find(keyword));
 		return "menu";
 	}
 	

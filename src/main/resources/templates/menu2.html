@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>メニュー</title>
+<link href="/css/commons.css" rel="stylesheet">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+
+    <div th:insert="header"></div>
+
+    <div class="btn"><a class="basic_btn regist" href="insert.html">新規登録</a></div>
+    <p>成功メッセージ</p>
+    <form method="get" action="#" class="search_container">
+      <input type="text" size="25" v-model="keyword" placeholder="キーワード検索">
+      <input type="button" @click="search" value="&#xf002">
+    </form>
+
+    <table>
+        <div class="caption"><p>検索結果：10件</p></div>
+        <div class="order">
+          <select class="base-text" v-model="selected" @change="selectedOrdrBy">
+            <option>並び替え</option>
+            <option value="product_id">商品ID</option>
+            <option value="category_id">カテゴリ</option>
+            <option value="price_asc">単価：安い順</option>
+            <option>単価：高い順</option>
+            <option>登録日：古い順</option>
+            <option>登録日：新しい順</option>
+          </select>
+        </div>
+      <thead>
+        <tr>
+          <th>商品ID</th>
+          <th>商品名</th>
+          <th>単価</th>
+          <th>カテゴリ</th>
+          <th>詳細</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template v-for="product in products">
+          <tr>
+            <td>{{ product.productId }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.category.name }}</td>
+            <td><a class="detail_btn" href="./detail.html">詳細</a></td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+  <footer></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    const vue = new Vue({
+      el: "#app",
+      data: {
+        selected: "",
+        keyword: "",
+        products: [],
+      },
+      methods: {
+        selectedOrdrBy() {
+          if(this.selected === "product_id") {
+            this.products.sort((e1, e2) => e1.ID >= e2.ID ? 1 : -1);
+          } else if(this.selected === "price_asc") {
+            this.products.sort((e1, e2) => e1.price - e2.price);
+          }
+        },
+        search() {
+        	fetch('/searchProduct?keyword=' + this.keyword)
+        	.then(res => res.json().then(data => this.products = data))
+			.catch(error => console.log(error))
+        },
+      },
+      created: function() {
+    	  fetch('/getProductList')
+    	  .then(res => res.json().then(data => this.products = data))
+    	  .catch(error => console.log(error))
+      }
+    })
+
+  </script>
+</body>
+</html>

@@ -27,4 +27,5 @@ public class UserDao {
         var list = jdbcTemplate.query(sql, param, new BeanPropertyRowMapper<User>(User.class));
         return list.isEmpty() ? null : list.get(0);
 	}
+	
 }

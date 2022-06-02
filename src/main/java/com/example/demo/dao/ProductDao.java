@@ -84,4 +84,16 @@ public class ProductDao {
         return jdbcTemplate.update(sql, param);
 		
 	}
+	
+	public Product findByProductId(String productId, int id) {
+		String sql = "select * from products where product_id = :product_id ";
+		if (id > 0) {
+			sql += "and id <> :id";
+		}
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("product_id", productId);
+		param.addValue("id", id);
+		var list = jdbcTemplate.query(sql, param, new BeanPropertyRowMapper<Product>(Product.class));
+        return list.isEmpty() ? null : list.get(0);
+	}
 }

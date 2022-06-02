@@ -10,38 +10,37 @@
 
   <div class="insert">
     <div class="form_body">
-      <p class="error">エラーメッセージ</p>
+      <p class="error" th:text="${errorMsg}"></p>
 
-      <form action="/update" method="post">
+      <form action="/update" method="post" th:object="${productForm}">
         <fieldset class="label-130">
-        	<input type="hidden" name="id" th:value="${product.id}">
+        	<input type="hidden" th:field="*{id}">
           <div>
             <label>商品ID</label>
-            <input type="text" name="productId" th:value="${product.productId}" class="base-text">
+            <input type="text" th:field="*{productId}" class="base-text">
             <span class="error">エラーメッセージ</span>
           </div>
           <div>
             <label>商品名</label>
-            <input type="text" name="name" th:value="${product.name}" class="base-text">
+            <input type="text" th:field="*{name}" class="base-text">
             <span class="error">エラーメッセージ</span>
           </div>
           <div>
             <label>単価</label>
-            <input type="text" name="price" th:value="${product.price}" class="base-text">
+            <input type="text" th:field="*{price}" class="base-text">
             <span class="error">エラーメッセージ</span>
           </div>
-          <div>
-            <label>カテゴリ</label> <select name="categoryId" class="base-text">
-              <option value="1" selected>ペン</option>
-              <option value="2">ノート</option>
-              <option value="3">消しゴム</option>
-              <option value="4">のり</option>
+          <div class="select_block">
+            <label class="required">カテゴリ</label>
+            <select th:field="*{categoryId}" class="base-text">
+              <option th:each="category : ${categoryList}" 
+              th:value="${category.id}" th:text="${category.name}">
+              </option>
             </select>
           </div>
           <div>
             <label>商品説明</label>
-            <textarea name="description" class="base-text">
-[[ ${product.description} ]]
+            <textarea th:field="*{description}" class="base-text">
             </textarea>
           </div>
           <div>

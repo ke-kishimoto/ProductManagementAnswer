@@ -17,28 +17,34 @@
     </div>
   
     <div class="form_body">
-      <p class="error">エラーメッセージ</p>
+      <p class="error" th:text="${errorMsg}"></p>
   
       <form action="insert" method="post" th:object="${productForm}">
         <fieldset class="label-130">
           <div>
             <label class="required">商品ID</label>
-            <input type="text" name="productId" class="base-text">
-            <span class="error">エラーメッセージ</span>
+            <input type="text" th:field="*{productId}" class="base-text">
+            <span class="error" th:each="error: ${#fields.errors('productId')}">
+            	[[ ${error} ]]
+            </span>
           </div>
           <div>
             <label class="required">商品名</label>
-            <input type="text" name="name" class="base-text">
-            <span class="error">エラーメッセージ</span>
+            <input type="text" th:field="*{name}" class="base-text">
+            <span class="error" th:each="error: ${#fields.errors('name')}">
+            	[[ ${error} ]]
+            </span>
           </div>
           <div>
             <label class="required">単価</label>
-            <input type="text" name="price" class="base-text">
-            <span class="error">エラーメッセージ</span>
+            <input type="text" th:field="*{price}" class="base-text">
+            <span class="error" th:each="error: ${#fields.errors('price')}">
+            	[[ ${error} ]]
+            </span>
           </div>
           <div class="select_block">
             <label class="required">カテゴリ</label>
-            <select name="categoryId" class="base-text">
+            <select th:field="*{categoryId}" class="base-text">
               <option th:each="category : ${categoryList}" 
               th:value="${category.id}" th:text="${category.name}">
               </option>
@@ -46,7 +52,7 @@
           </div>
           <div>
             <label>商品説明</label>
-            <textarea name="description" class="base-text"></textarea>
+            <textarea th:field="*{description}" class="base-text"></textarea>
           </div>
           <div>
             <label>画像</label>

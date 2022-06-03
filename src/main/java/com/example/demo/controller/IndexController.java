@@ -79,7 +79,7 @@ public class IndexController {
 	}
 	
 	/*
-	 * メニュー画面への遷移
+	 * メニュー画面2への遷移
 	 */
 	@RequestMapping(value = "/menu2")
 	public String menu2(Model model) {
@@ -103,6 +103,14 @@ public class IndexController {
 		var categoryList = categoryDao.findAll();
 		model.addAttribute("categoryList", categoryList);
 		return "insert";
+	}
+	
+	/*
+	 * 新規登録画面2への遷移
+	 */
+	@GetMapping("/insert2")
+	public String insert2(@ModelAttribute("productForm") ProductForm pForm, Model model) {
+		return "insert2";
 	}
 	
 	/*

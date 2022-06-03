@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>商品登録</title>
+<link href="/css/commons.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/snackbar.min.css" /> 
+<script src="/js/snackbar.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+
+  <div th:insert="header"></div>
+  
+  <div class="insert">
+    <div class="discription">
+      <p>
+        登録情報を入力してください（<span class="required"></span>は必須です）
+      </p>
+    </div>
+  
+    <div class="form_body">
+  
+      <form action="" method="get">
+        <fieldset class="label-130">
+          <div>
+            <label class="required">商品ID</label>
+            <input type="text" v-model="product.productId" required class="base-text">
+            <span class="error"></span>
+          </div>
+          <div>
+            <label class="required">商品名</label>
+            <input type="text" v-model="product.name" required class="base-text">
+            <span class="error"></span>
+          </div>
+          <div>
+            <label class="required">単価</label>
+            <input type="text" v-model="product.price" required class="base-text">
+            <span class="error"></span>
+          </div>
+          <div class="select_block">
+            <label class="required">カテゴリ</label>
+            <select v-model="product.categoryId" required class="base-text">
+              <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
+            </select>
+          </div>
+          <div>
+            <label>商品説明</label>
+            <textarea v-model="product.description" class="base-text"></textarea>
+          </div>
+          <div>
+            <label>画像</label>
+            <input type="file" name="file">
+            <span class="error"></span>
+          </div>
+        </fieldset>
+        <div class="btns">
+          <button type="button" onclick="openModal()" class="basic_btn">登録</button>
+          <input type="button" onclick="location.href='/menu2'" value="戻る" class="cancel_btn">
+        </div>
+        <div id="modal">
+          <p class="modal_message">登録しますか？</p>
+          <div class="btns">
+            <button type="button" @click="register" class="basic_btn">登録</button>
+            <button type="button" onclick="closeModal()" class="cancel_btn">キャンセル</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="fadeLayer"></div>
+ </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="./js/commons.js"></script>
+  <script>
+  const vue = new Vue({
+	  el:"#app",
+	  data: {
+		  categories: [],
+		  product: {},
+		  
+	  },
+	  methods: {
+		  register() {
+			 closeModal()
+			 fetch('/registerProduct', {
+				 method: 'POST',
+				 headers: {
+				      'Content-Type': 'application/json'
+				 },
+				 body: JSON.stringify(this.product)
+			 }).then(res => res.json().then( data => {
+				 console.log(data)
+				 if(data >= 0) {
+					 Snackbar.show({text: '登録完了しました。', 
+						 pos: 'top-center', 
+						 actionText: '閉じる',});
+				 }
+			 })
+			 ).catch(error => console.log(error))
+		  },
+	  },
+	  created: function() {
+		  fetch('/getCategoryList')
+		  .then(res => res.json().then( data => this.categories = data))
+		  .catch(error => console.log(error))
+	  }
+  })
+  </script>
+</body>
+</html>

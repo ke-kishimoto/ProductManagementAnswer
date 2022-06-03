@@ -27,6 +27,11 @@ public class ProductController {
 		return productDao.find("");
 	}
 	
+	@GetMapping("/getProduct")
+	public Product getProduct(@RequestParam("id") int id) {
+		return productDao.findById(id);
+	}
+	
 	@GetMapping("/searchProduct")
 	public List<Product> searchProduct(@RequestParam("keyword") String keyword) {
 		return productDao.find(keyword);
@@ -40,6 +45,11 @@ public class ProductController {
 	@PostMapping("/registerProduct")
 	public int registerProduct(@RequestBody Product product) {
 		return productDao.insert(product);
+	}
+	
+	@PostMapping("/deleteProduct")
+	public int deleteProduct(@RequestBody int id) {
+		return productDao.delete(id);
 	}
 
 }

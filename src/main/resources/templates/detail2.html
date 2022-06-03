@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>商品詳細</title>
+<link href="css/commons.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="app">
+
+  <div th:insert="header"></div>
+
+  <div class="update">
+    <div class="form_body">
+      <div class="img_block">
+        <img src="images/マッキー.png" class="product_img"><br>
+      </div>
+      <form action="menu.html" method="get">
+        <fieldset class="label-130 product_block">
+          <p class="error">エラーメッセージ</p>
+          <div>
+            <label>商品ID</label>
+            <input type="text" v-model="product.productId" readonly class="base-text">
+          </div>
+          <div>
+            <label>商品名</label>
+            <input type="text" v-model="product.name" readonly class="base-text">
+          </div>
+          <div>
+            <label>単価</label>
+            <input type="text" v-model="product.price" readonly class="base-text">
+          </div>
+          <div>
+            <label>カテゴリ</label>
+            <input type="text" v-model="product.categoryId" readonly class="base-text">
+          </div>
+          <div>
+            <label>商品説明</label>
+            <textarea v-model="product.description" readonly class="base-text" style="background-color: rgb(209, 209, 209);">
+            </textarea>
+          </div>
+        </fieldset>
+        <div>
+          <div class="btns">
+            <input type="button" onclick="openModal()" value="削除" class="basic_btn">
+            <input type="button" onclick="location.href='./updateInput.html'" value="編集" class="basic_btn">
+            <input type="button" onclick="location.href='/menu2'" value="戻る" class="cancel_btn">
+          </div>
+          <div id="modal">
+            <p class="modal_message">削除しますか？</p>
+            <div class="btns">
+              <button type="button" @click="deleteProduct" class="basic_btn">削除</button>
+              <button type="button" onclick="closeModal()" class="cancel_btn">キャンセル</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="fadeLayer"></div>
+</div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="./js/commons.js"></script>
+  <script>
+  const vue = new Vue({
+	 el: "#app",
+	 data: {
+		 id: -1,
+	     product: {},
+	 },
+	 methods: {
+	     getParam(name, url) {
+		     if (!url) url = window.location.href;
+		     name = name.replace(/[\[\]]/g, "\\$&");
+		     const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+			     results = regex.exec(url);
+		     if (!results) return null;
+		     if (!results[2]) return '';
+		     return decodeURIComponent(results[2].replace(/\+/g, " "));
+		},
+		deleteProduct() {
+			closeModal()
+			const param = new URLSearchParams();
+			param.append('id', this.id);
+			fetch('/deleteProduct', {
+				method: 'post',
+				body: param
+			}).then(res => res.json().then(data => {
+				console.log(data)
+				location.href = '/menu2'
+			}))
+			.catch(error => console.log(error))
+		},
+	  },
+	  created: function() {
+		  this.id = this.getParam('id')
+		  fetch('getProduct?id=' + this.id)
+		  .then(res => res.json().then(data => this.product = data))
+		  .catch(error => console.log(error))
+	  }
+  })
+  </script>
+</body>
+</html>

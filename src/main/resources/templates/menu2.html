@@ -48,7 +48,7 @@
             <td>{{ product.name }}</td>
             <td>{{ product.price }}</td>
             <td>{{ product.category.name }}</td>
-            <td><a class="detail_btn" href="./detail.html">詳細</a></td>
+            <td><a class="detail_btn" :href="'/detail2?id=' + product.id ">詳細</a></td>
           </tr>
         </template>
       </tbody>

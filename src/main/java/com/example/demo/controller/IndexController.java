@@ -174,6 +174,14 @@ public class IndexController {
 	}
 	
 	/*
+	 * 詳細画面2への遷移
+	 */
+	@GetMapping("/detail2")
+	public String detail2() {
+		return "detail2";
+	}
+	
+	/*
 	 * 削除時
 	 */
 	@RequestMapping(value = "/update", params = "delete", method = RequestMethod.POST)

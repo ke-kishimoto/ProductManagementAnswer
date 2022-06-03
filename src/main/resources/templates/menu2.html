@@ -11,7 +11,8 @@
 
     <div th:insert="header"></div>
 
-    <div class="btn"><a class="basic_btn regist" href="insert.html">新規登録</a></div>
+    <div class="btn"><a class="basic_btn regist" href="/insert">新規登録</a></div>
+    <div class="btn"><a class="basic_btn regist" href="/menu">Java版メニュー</a></div>
     <p>成功メッセージ</p>
     <form method="get" action="#" class="search_container">
       <input type="text" size="25" v-model="keyword" placeholder="キーワード検索">
@@ -26,7 +27,7 @@
             <option value="product_id">商品ID</option>
             <option value="category_id">カテゴリ</option>
             <option value="price_asc">単価：安い順</option>
-            <option>単価：高い順</option>
+            <option value="price_desc">単価：高い順</option>
             <option>登録日：古い順</option>
             <option>登録日：新しい順</option>
           </select>
@@ -68,8 +69,12 @@
         selectedOrdrBy() {
           if(this.selected === "product_id") {
             this.products.sort((e1, e2) => e1.ID >= e2.ID ? 1 : -1);
+          } else if(this.selected === "category_id") {
+        	this.products.sort((e1, e2) => e1.category.id - e2.category.id);
           } else if(this.selected === "price_asc") {
             this.products.sort((e1, e2) => e1.price - e2.price);
+          } else if(this.selected === "price_desc") {
+        	  this.products.sort((e1, e2) => e2.price - e1.price);
           }
         },
         search() {

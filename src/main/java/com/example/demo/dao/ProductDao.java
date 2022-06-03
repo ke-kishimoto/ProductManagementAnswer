@@ -23,6 +23,7 @@ public class ProductDao {
 				, p.product_id 
 				, p.name 
 				, p.price 
+				, c.id category_id
 				, c.name category_name 
 				from products p 
 				join categories c 

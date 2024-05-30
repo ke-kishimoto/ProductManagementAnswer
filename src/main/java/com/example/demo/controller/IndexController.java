@@ -124,7 +124,7 @@ public class IndexController {
 			return "/insert";
 		}
 		// 存在チェック
-		var product = productService.findByProductId(pForm.getProductId(), -1);
+		var product = productService.findByProductCode(pForm.getProductCode(), -1);
 		if(product != null) {
 			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
 			return "/insert";
@@ -149,7 +149,7 @@ public class IndexController {
 			return "/updateInput";
 		}
 		// 存在チェック
-		var product = productService.findByProductId(pForm.getProductId(), pForm.getId());
+		var product = productService.findByProductCode(pForm.getProductCode(), pForm.getId());
 		if(product != null) {
 			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
 			model.addAttribute("categoryList", categoryService.findAll());
@@ -203,7 +203,7 @@ public class IndexController {
 		pForm.setId(product.getId());
 		pForm.setName(product.getName());
 		pForm.setPrice(product.getPrice());
-		pForm.setProductId(product.getProductId());
+		pForm.setProductCode(product.getProductCode());
 		pForm.setCategoryId(product.getCategory().getId());
 		pForm.setDescription(product.getDescription());
 
@@ -215,7 +215,7 @@ public class IndexController {
 	private void FormToProduct(ProductForm pForm, Product product) {
 		product.setName(pForm.getName());
 		product.setPrice(pForm.getPrice());
-		product.setProductId(pForm.getProductId());
+		product.setProductCode(pForm.getProductCode());
 		product.setCategoryId(pForm.getCategoryId());
 		product.setDescription(pForm.getDescription());
 	}

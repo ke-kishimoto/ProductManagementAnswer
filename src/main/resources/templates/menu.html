@@ -24,7 +24,7 @@
         <div class="order">
           <select class="base-text" v-model="selected" @change="selectedOrdrBy">
             <option>並び替え</option>
-            <option value="product_id">商品ID</option>
+            <option value="product_code">商品ID</option>
             <option value="category_id">カテゴリ</option>
             <option value="price_asc">単価：安い順</option>
             <option value="price_desc">単価：高い順</option>
@@ -43,7 +43,7 @@
       </thead>
       <tbody>
           <tr th:each="product : ${productList}">
-            <td>[[ ${product.productId} ]]</td>
+            <td>[[ ${product.productCode} ]]</td>
             <td>[[ ${product.name} ]]</td>
             <td>[[ ${product.price} ]]</td>
             <td>[[ ${product.category.name} ]]</td>

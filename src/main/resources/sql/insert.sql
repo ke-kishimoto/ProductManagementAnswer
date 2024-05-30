@@ -12,23 +12,23 @@ insert into categories(name) values('紙製品');
 insert into categories(name) values('雑貨');
 
 -- products
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('A0001', 1, 'マッキー(黒)', 160, 'ゼブラ株式会社 線の太さ：太6.0mm、細1.5～2.0mm');
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('B0001', 2, '電卓', 935, '');
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('C0001', 3, 'ホッチキス芯', 220, '');
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('D0001', 4, 'Campus(5冊組)', 220, '');
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('E0001', 5, '地球儀', 3800, '');
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('D0001', 4, 'ロジカルノート(5冊組)', 386, '');
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('B0002', 2, 'レジスター', 24000, '');
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('A0002', 1, 'カドケシ', 130, '');
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('10009', 3, 'アラビックヤマト', 200, '');
-insert into products (product_id, category_id, name, price, description)
+insert into products (product_code, category_id, name, price, description)
 values('10010', 5, '粘土', 160, '');

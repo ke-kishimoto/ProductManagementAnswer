@@ -20,7 +20,7 @@ create table categories(
 -- drop table products;
 create table products(
     id serial primary key
-    , product_id varchar(20) unique not null
+    , product_code varchar(20) unique not null
     , category_id int not null
     , name varchar(255) not null
     , price int

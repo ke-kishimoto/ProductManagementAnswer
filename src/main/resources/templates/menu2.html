@@ -24,7 +24,7 @@
         <div class="order">
           <select class="base-text" v-model="selected" @change="selectedOrdrBy">
             <option>並び替え</option>
-            <option value="product_id">商品ID</option>
+            <option value="product_code">商品ID</option>
             <option value="category_id">カテゴリ</option>
             <option value="price_asc">単価：安い順</option>
             <option value="price_desc">単価：高い順</option>
@@ -44,7 +44,7 @@
       <tbody>
         <template v-for="product in products">
           <tr>
-            <td>{{ product.productId }}</td>
+            <td>{{ product.productCode }}</td>
             <td>{{ product.name }}</td>
             <td>{{ product.price }}</td>
             <td>{{ product.category.name }}</td>
@@ -66,7 +66,7 @@
       },
       methods: {
         selectedOrdrBy() {
-          if(this.selected === "product_id") {
+          if(this.selected === "product_code") {
             this.products.sort((e1, e2) => e1.ID >= e2.ID ? 1 : -1);
           } else if(this.selected === "category_id") {
         	this.products.sort((e1, e2) => e1.category.id - e2.category.id);

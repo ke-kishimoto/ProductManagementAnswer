@@ -6,18 +6,18 @@ import lombok.Data;
 public class Product {
 	
 	private int id;
-	private String productId;
+	private String productCode;
 	private String name;
 	private int price;
 	private String description;
 	
 	private Category category;
 	
-	public void setCategoryId(int category_id) {
+	public void setCategoryId(int categoryId) {
 		if(this.category == null) {
 			this.category = new Category();
 		}
-		category.setId(category_id);
+		category.setId(categoryId);
 	}
 	
 	public void setCategoryName(String categoryName) {

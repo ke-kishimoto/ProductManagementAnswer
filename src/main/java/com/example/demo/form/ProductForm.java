@@ -10,7 +10,7 @@ public class ProductForm {
 	
 	private int id;
 	@NotBlank
-	private String productId;
+	private String productCode;
 	@NotBlank
 	private String name;
 	@NotNull

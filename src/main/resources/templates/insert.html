@@ -23,8 +23,8 @@
         <fieldset class="label-130">
           <div>
             <label class="required">商品ID</label>
-            <input type="text" th:field="*{productId}" class="base-text">
-            <span class="error" th:each="error: ${#fields.errors('productId')}">
+            <input type="text" th:field="*{productCode}" class="base-text">
+            <span class="error" th:each="error: ${#fields.errors('productCode')}">
             	[[ ${error} ]]
             </span>
           </div>

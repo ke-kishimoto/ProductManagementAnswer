@@ -20,7 +20,7 @@ public class ProductRepository {
 		
 		String sql = """
 				select p.id
-				, p.product_id
+				, p.product_code
 				, p.name
 				, p.price
 				, c.id category_id
@@ -46,11 +46,11 @@ public class ProductRepository {
 	
 	public int insert(Product p) {
 		String sql = """
-				insert into products (product_id, name, price, category_id, created_at)
-				values (:product_id, :name, :price, :category_id, now())
+				insert into products (product_code, name, price, category_id, created_at)
+				values (:product_code, :name, :price, :category_id, now())
 				""";
 		MapSqlParameterSource param = new MapSqlParameterSource();
-        param.addValue("product_id", p.getProductId());
+        param.addValue("product_code", p.getProductCode());
         param.addValue("name", p.getName());
         param.addValue("price", p.getPrice());
         param.addValue("category_id", p.getCategory().getId());
@@ -68,7 +68,7 @@ public class ProductRepository {
 	public int update(Product p) {
 		String sql = """
 				update products
-				  set product_id = :product_id
+				  set product_code = :product_code
 				  , name = :name
 				  , price = :price
 				  , category_id = :category_id
@@ -77,7 +77,7 @@ public class ProductRepository {
 				""";
 		MapSqlParameterSource param = new MapSqlParameterSource();
 		param.addValue("id", p.getId());
-        param.addValue("product_id", p.getProductId());
+        param.addValue("product_code", p.getProductCode());
         param.addValue("name", p.getName());
         param.addValue("price", p.getPrice());
         param.addValue("category_id", p.getCategory().getId());
@@ -86,13 +86,13 @@ public class ProductRepository {
 		
 	}
 	
-	public Product findByProductId(String productId, int id) {
-		String sql = "select * from products where product_id = :product_id ";
+	public Product findByProductCode(String productCode, int id) {
+		String sql = "select * from products where product_code = :product_code ";
 		if (id > 0) {
 			sql += "and id <> :id";
 		}
 		MapSqlParameterSource param = new MapSqlParameterSource();
-		param.addValue("product_id", productId);
+		param.addValue("product_code", productCode);
 		param.addValue("id", id);
 		var list = jdbcTemplate.query(sql, param, new BeanPropertyRowMapper<Product>(Product.class));
         return list.isEmpty() ? null : list.get(0);

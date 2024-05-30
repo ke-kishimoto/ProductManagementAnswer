@@ -31,7 +31,7 @@ public class ProductService {
         return productRepository.update(p);
     }
 
-    public Product findByProductId(String productId, int id) {
-        return productRepository.findByProductId(productId, id);
+    public Product findByProductCode(String productCode, int id) {
+        return productRepository.findByProductCode(productCode, id);
     }
 }

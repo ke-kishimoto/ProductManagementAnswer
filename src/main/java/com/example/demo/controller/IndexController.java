@@ -126,7 +126,7 @@ public class IndexController {
 		// 存在チェック
 		var product = productService.findByProductCode(pForm.getProductCode(), -1);
 		if(product != null) {
-			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
+			model.addAttribute("errorMsg", "商品コードは既に使用されています。");
 			return "/insert";
 		}
 		
@@ -151,7 +151,7 @@ public class IndexController {
 		// 存在チェック
 		var product = productService.findByProductCode(pForm.getProductCode(), pForm.getId());
 		if(product != null) {
-			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
+			model.addAttribute("errorMsg", "商品コードは既に使用されています。");
 			model.addAttribute("categoryList", categoryService.findAll());
 			return "/updateInput";
 		}

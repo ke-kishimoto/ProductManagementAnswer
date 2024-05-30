@@ -22,7 +22,7 @@
       <form action="insert" method="post" th:object="${productForm}">
         <fieldset class="label-130">
           <div>
-            <label class="required">商品ID</label>
+            <label class="required">商品コード</label>
             <input type="text" th:field="*{productCode}" class="base-text">
             <span class="error" th:each="error: ${#fields.errors('productCode')}">
             	[[ ${error} ]]

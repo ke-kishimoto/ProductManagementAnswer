@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.service.CategoryService;
+import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.dao.CategoryDao;
-import com.example.demo.dao.ProductDao;
-import com.example.demo.dao.UserDao;
+import com.example.demo.repository.ProductRepository;
 import com.example.demo.entity.Product;
 import com.example.demo.form.LoginForm;
 import com.example.demo.form.ProductForm;
@@ -26,11 +26,13 @@ import com.example.demo.form.ProductForm;
 public class IndexController {
 	
 	@Autowired
-	ProductDao productDao;
+	private ProductRepository productRepository;
+
 	@Autowired
-	CategoryDao categoryDao;
+	private CategoryService categoryService;
+
 	@Autowired
-	UserDao userDao;
+	private UserService userService;
 	@Autowired
 	HttpSession session;
 	
@@ -59,13 +61,13 @@ public class IndexController {
 		if(bindingResult.hasErrors()) {
 			return "/index";
 		}
-		var user = userDao.login(loginForm.getLoginId(), loginForm.getPassword());
+		var user = userService.login(loginForm.getLoginId(), loginForm.getPassword());
 		if (user == null) {
 			model.addAttribute("errorMsg", "IDまたはパスワードが不正です。");
 			return "/index";
 		}
 		session.setAttribute("user", user);
-		model.addAttribute("productList", productDao.find(""));
+		model.addAttribute("productList", productRepository.find(""));
 		return "menu";
 	}
 	
@@ -74,7 +76,7 @@ public class IndexController {
 	 */
 	@RequestMapping(value = "/menu")
 	public String menu(Model model) {
-		model.addAttribute("productList", productDao.find(""));
+		model.addAttribute("productList", productRepository.find(""));
 		return "menu";
 	}
 	
@@ -91,7 +93,7 @@ public class IndexController {
 	 */
 	@RequestMapping(value = "/search")
 	public String search(@RequestParam("keyword") String keyword ,Model model) {
-		model.addAttribute("productList", productDao.find(keyword));
+		model.addAttribute("productList", productRepository.find(keyword));
 		return "menu";
 	}
 	
@@ -100,7 +102,7 @@ public class IndexController {
 	 */
 	@GetMapping("/insert")
 	public String insert(@ModelAttribute("productForm") ProductForm pForm, Model model) {
-		var categoryList = categoryDao.findAll();
+		var categoryList = categoryService.findAll();
 		model.addAttribute("categoryList", categoryList);
 		return "insert";
 	}
@@ -122,7 +124,7 @@ public class IndexController {
 			return "/insert";
 		}
 		// 存在チェック
-		var product = productDao.findByProductId(pForm.getProductId(), -1);
+		var product = productRepository.findByProductId(pForm.getProductId(), -1);
 		if(product != null) {
 			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
 			return "/insert";
@@ -130,10 +132,10 @@ public class IndexController {
 		
 		product = new Product();
 		this.FormToProduct(pForm, product);
-		var count = productDao.insert(product);
+		var count = productRepository.insert(product);
 		this.setMsg(model, "登録", count);
 		
-		model.addAttribute("productList", productDao.find(""));
+		model.addAttribute("productList", productRepository.find(""));
 		
 		return "menu";
 	}
@@ -147,19 +149,19 @@ public class IndexController {
 			return "/updateInput";
 		}
 		// 存在チェック
-		var product = productDao.findByProductId(pForm.getProductId(), pForm.getId());
+		var product = productRepository.findByProductId(pForm.getProductId(), pForm.getId());
 		if(product != null) {
 			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
-			model.addAttribute("categoryList", categoryDao.findAll());
+			model.addAttribute("categoryList", categoryService.findAll());
 			return "/updateInput";
 		}
 		product = new Product();
 		product.setId(pForm.getId());
 		this.FormToProduct(pForm, product);
-		var count = productDao.update(product);
+		var count = productRepository.update(product);
 		this.setMsg(model, "更新", count);
 		
-		model.addAttribute("productList", productDao.find(""));
+		model.addAttribute("productList", productRepository.find(""));
 		
 		return "/menu";
 	}
@@ -169,7 +171,7 @@ public class IndexController {
 	 */
 	@GetMapping("/detail/{id}")
 	public String detail(@PathVariable("id") int id, Model model) {
-		model.addAttribute("product", productDao.findById(id));
+		model.addAttribute("product", productRepository.findById(id));
 		return "detail";
 	}
 	
@@ -186,9 +188,9 @@ public class IndexController {
 	 */
 	@RequestMapping(value = "/update", params = "delete", method = RequestMethod.POST)
 	public String delete(@RequestParam("id") int id, Model model) {
-		var count = productDao.delete(id);
+		var count = productRepository.delete(id);
 		this.setMsg(model, "削除", count);
-		model.addAttribute("productList", productDao.find(""));
+		model.addAttribute("productList", productRepository.find(""));
 		return "menu";
 	}
 	
@@ -197,7 +199,7 @@ public class IndexController {
 	 */
 	@GetMapping("/updateInput/{id}")
 	public String updateInput(@ModelAttribute("productForm") ProductForm pForm, @PathVariable("id") int id, Model model) {
-		var product = productDao.findById(id);
+		var product = productRepository.findById(id);
 		pForm.setId(product.getId());
 		pForm.setName(product.getName());
 		pForm.setPrice(product.getPrice());
@@ -205,7 +207,7 @@ public class IndexController {
 		pForm.setCategoryId(product.getCategory().getId());
 		pForm.setDescription(product.getDescription());
 
-		model.addAttribute("categoryList", categoryDao.findAll());
+		model.addAttribute("categoryList", categoryService.findAll());
 		
 		return "updateInput";
 	}

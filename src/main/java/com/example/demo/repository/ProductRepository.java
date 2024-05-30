@@ -1,4 +1,4 @@
-package com.example.demo.dao;
+package com.example.demo.repository;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.Product;
 
 @Repository
-public class ProductDao {
+public class ProductRepository {
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;

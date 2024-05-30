@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 
 import com.example.demo.service.CategoryService;
+import com.example.demo.service.ProductService;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.repository.ProductRepository;
 import com.example.demo.entity.Product;
 import com.example.demo.form.LoginForm;
 import com.example.demo.form.ProductForm;
 
 @Controller
 public class IndexController {
-	
+
 	@Autowired
-	private ProductRepository productRepository;
+	private ProductService productService;
 
 	@Autowired
 	private CategoryService categoryService;
@@ -67,7 +67,7 @@ public class IndexController {
 			return "/index";
 		}
 		session.setAttribute("user", user);
-		model.addAttribute("productList", productRepository.find(""));
+		model.addAttribute("productList", productService.find(""));
 		return "menu";
 	}
 	
@@ -76,7 +76,7 @@ public class IndexController {
 	 */
 	@RequestMapping(value = "/menu")
 	public String menu(Model model) {
-		model.addAttribute("productList", productRepository.find(""));
+		model.addAttribute("productList", productService.find(""));
 		return "menu";
 	}
 	
@@ -93,7 +93,7 @@ public class IndexController {
 	 */
 	@RequestMapping(value = "/search")
 	public String search(@RequestParam("keyword") String keyword ,Model model) {
-		model.addAttribute("productList", productRepository.find(keyword));
+		model.addAttribute("productList", productService.find(keyword));
 		return "menu";
 	}
 	
@@ -124,7 +124,7 @@ public class IndexController {
 			return "/insert";
 		}
 		// 存在チェック
-		var product = productRepository.findByProductId(pForm.getProductId(), -1);
+		var product = productService.findByProductId(pForm.getProductId(), -1);
 		if(product != null) {
 			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
 			return "/insert";
@@ -132,10 +132,10 @@ public class IndexController {
 		
 		product = new Product();
 		this.FormToProduct(pForm, product);
-		var count = productRepository.insert(product);
+		var count = productService.insert(product);
 		this.setMsg(model, "登録", count);
 		
-		model.addAttribute("productList", productRepository.find(""));
+		model.addAttribute("productList", productService.find(""));
 		
 		return "menu";
 	}
@@ -149,7 +149,7 @@ public class IndexController {
 			return "/updateInput";
 		}
 		// 存在チェック
-		var product = productRepository.findByProductId(pForm.getProductId(), pForm.getId());
+		var product = productService.findByProductId(pForm.getProductId(), pForm.getId());
 		if(product != null) {
 			model.addAttribute("errorMsg", "商品IDは既に使用されています。");
 			model.addAttribute("categoryList", categoryService.findAll());
@@ -158,10 +158,10 @@ public class IndexController {
 		product = new Product();
 		product.setId(pForm.getId());
 		this.FormToProduct(pForm, product);
-		var count = productRepository.update(product);
+		var count = productService.update(product);
 		this.setMsg(model, "更新", count);
 		
-		model.addAttribute("productList", productRepository.find(""));
+		model.addAttribute("productList", productService.find(""));
 		
 		return "/menu";
 	}
@@ -171,7 +171,7 @@ public class IndexController {
 	 */
 	@GetMapping("/detail/{id}")
 	public String detail(@PathVariable("id") int id, Model model) {
-		model.addAttribute("product", productRepository.findById(id));
+		model.addAttribute("product", productService.findById(id));
 		return "detail";
 	}
 	
@@ -188,9 +188,9 @@ public class IndexController {
 	 */
 	@RequestMapping(value = "/update", params = "delete", method = RequestMethod.POST)
 	public String delete(@RequestParam("id") int id, Model model) {
-		var count = productRepository.delete(id);
+		var count = productService.delete(id);
 		this.setMsg(model, "削除", count);
-		model.addAttribute("productList", productRepository.find(""));
+		model.addAttribute("productList", productService.find(""));
 		return "menu";
 	}
 	
@@ -199,7 +199,7 @@ public class IndexController {
 	 */
 	@GetMapping("/updateInput/{id}")
 	public String updateInput(@ModelAttribute("productForm") ProductForm pForm, @PathVariable("id") int id, Model model) {
-		var product = productRepository.findById(id);
+		var product = productService.findById(id);
 		pForm.setId(product.getId());
 		pForm.setName(product.getName());
 		pForm.setPrice(product.getPrice());

@@ -20,15 +20,15 @@ public class ProductRepository {
 		
 		String sql = """
 				select p.id
-				, p.product_id 
-				, p.name 
-				, p.price 
+				, p.product_id
+				, p.name
+				, p.price
 				, c.id category_id
-				, c.name category_name 
-				from products p 
-				join categories c 
-				on p.category_id = c.id 
-				where p.name || c.name like '%' || :keyword || '%' 
+				, c.name category_name
+				from products p
+				join categories c
+				on p.category_id = c.id
+				where p.name || c.name like '%' || :keyword || '%'
 				order by p.id
 				""";
 		MapSqlParameterSource param = new MapSqlParameterSource();

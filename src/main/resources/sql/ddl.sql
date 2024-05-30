@@ -1,3 +1,5 @@
+-- docker run --name product-management-postgres -e POSTGRES_PASSWORD=test -p 5432:5432 -d postgres
+
 -- drop table users;
 create table users(
     id serial primary key

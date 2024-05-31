@@ -1,20 +1,21 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Product;
+import com.example.demo.record.ProductRecord;
 
 import java.util.List;
 
 public interface ProductRepository {
 
-    List<Product> find(String keyword);
+    List<ProductRecord> find(String keyword);
 
-    Product findById(int id);
+    ProductRecord findById(int id);
 
-    int insert(Product p);
+    int insert(ProductRecord p);
 
     int delete(int id);
 
-    int update(Product p);
+    int update(ProductRecord p);
 
     Product findByProductCode(String productCode, int id);
 }

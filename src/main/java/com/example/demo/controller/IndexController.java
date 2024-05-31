@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.entity.Category;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.ProductService;
 import com.example.demo.service.UserService;
@@ -130,8 +131,7 @@ public class IndexController {
 			return "/insert";
 		}
 		
-		product = new Product();
-		this.FormToProduct(pForm, product);
+		product = this.FormToProduct(pForm);
 		var count = productService.insert(product);
 		this.setMsg(model, "登録", count);
 		
@@ -155,9 +155,8 @@ public class IndexController {
 			model.addAttribute("categoryList", categoryService.findAll());
 			return "/updateInput";
 		}
-		product = new Product();
-		product.setId(pForm.getId());
-		this.FormToProduct(pForm, product);
+		product = this.FormToProduct(pForm);
+
 		var count = productService.update(product);
 		this.setMsg(model, "更新", count);
 		
@@ -200,24 +199,27 @@ public class IndexController {
 	@GetMapping("/updateInput/{id}")
 	public String updateInput(@ModelAttribute("productForm") ProductForm pForm, @PathVariable("id") int id, Model model) {
 		var product = productService.findById(id);
-		pForm.setId(product.getId());
-		pForm.setName(product.getName());
-		pForm.setPrice(product.getPrice());
-		pForm.setProductCode(product.getProductCode());
-		pForm.setCategoryId(product.getCategory().getId());
-		pForm.setDescription(product.getDescription());
+		pForm.setId(product.id());
+		pForm.setName(product.name());
+		pForm.setPrice(product.price());
+		pForm.setProductCode(product.productCode());
+		pForm.setCategoryId(product.category().id());
+		pForm.setDescription(product.description());
 
 		model.addAttribute("categoryList", categoryService.findAll());
 		
 		return "updateInput";
 	}
 	
-	private void FormToProduct(ProductForm pForm, Product product) {
-		product.setName(pForm.getName());
-		product.setPrice(pForm.getPrice());
-		product.setProductCode(pForm.getProductCode());
-		product.setCategoryId(pForm.getCategoryId());
-		product.setDescription(pForm.getDescription());
+	private Product FormToProduct(ProductForm pForm) {
+		return new Product(
+				pForm.getId(),
+				pForm.getProductCode(),
+				pForm.getName(),
+				pForm.getPrice(),
+				pForm.getDescription(),
+				new Category(pForm.getCategoryId(), "")
+		);
 	}
 	
 	private void setMsg(Model model, String mode, int count) {

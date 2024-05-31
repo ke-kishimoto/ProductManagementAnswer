@@ -14,6 +14,8 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public List<Category> findAll() {
-        return categoryRepository.findAll();
+        return categoryRepository.findAll().stream().map(categoryRecord -> {
+            return new Category(categoryRecord.id(), categoryRecord.name());
+        }).toList();
     }
 }

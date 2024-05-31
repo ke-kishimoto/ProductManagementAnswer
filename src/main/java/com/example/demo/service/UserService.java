@@ -12,6 +12,6 @@ public class UserService {
     private UserRepository userRepository;
 
     public User login(String loginId, String password) {
-        return userRepository.login(loginId, password);
+        return userRepository.login(loginId, password).toUser();
     }
 }

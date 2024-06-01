@@ -1,6 +1,6 @@
 package com.example.demo.product.controller;
 
-import com.example.demo.product.controller.form.ProductForm;
+import com.example.demo.product.controller.form.ProductUpdateForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ public class ProductJsController {
      * 新規登録画面2への遷移
      */
     @GetMapping("/insert2")
-    public String insert2(@ModelAttribute("productForm") ProductForm pForm, Model model) {
+    public String insert2(@ModelAttribute("productForm") ProductUpdateForm pForm, Model model) {
         return "insert2";
     }
 

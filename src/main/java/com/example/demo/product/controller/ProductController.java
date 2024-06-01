@@ -6,6 +6,7 @@ import com.example.demo.category.service.CategoryService;
 import com.example.demo.category.view.CategorySelectView;
 import com.example.demo.category.vo.CategoryId;
 import com.example.demo.category.vo.CategoryName;
+import com.example.demo.product.controller.form.ProductInsertForm;
 import com.example.demo.product.controller.view.ProductDetailView;
 import com.example.demo.product.controller.view.ProductListView;
 import com.example.demo.product.service.ProductService;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.product.entity.Product;
-import com.example.demo.product.controller.form.ProductForm;
+import com.example.demo.product.controller.form.ProductUpdateForm;
+
+import java.util.List;
 
 @Controller
 public class ProductController {
@@ -57,9 +60,8 @@ public class ProductController {
 	 * 新規登録画面への遷移
 	 */
 	@GetMapping("/insert")
-	public String insert(@ModelAttribute("productForm") ProductForm pForm, Model model) {
-		var categoryList = categoryService.findAll();
-		model.addAttribute("categoryList", categoryList);
+	public String insert(@ModelAttribute("productForm") ProductInsertForm insertForm, Model model) {
+		model.addAttribute("categoryList", this.getCategoryList());
 		return "insert";
 	}
 
@@ -67,19 +69,20 @@ public class ProductController {
 	 * 新規登録時
 	 */
 	@PostMapping("/insert") 
-	public String insertProduct(@Validated @ModelAttribute("productForm") ProductForm pForm, BindingResult bindingResult ,Model model) {
+	public String insertProduct(@Validated @ModelAttribute("productForm") ProductInsertForm insertForm, BindingResult bindingResult , Model model) {
 		if(bindingResult.hasErrors()) {
+			model.addAttribute("categoryList", this.getCategoryList());
 			return "/insert";
 		}
 		// 存在チェック
-		var product = productService.findByProductCode(pForm.getProductCode(), -1);
+		var product = productService.findByProductCode(insertForm.getProductCode());
 		if(product != null) {
 			model.addAttribute("errorMsg", "商品コードは既に使用されています。");
+			model.addAttribute("categoryList", this.getCategoryList());
 			return "/insert";
 		}
-		
-		product = this.FormToProduct(pForm);
-		productService.insert(product);
+
+		productService.insert(insertForm.toProduct());
 
 		return "/success";
 	}
@@ -88,20 +91,19 @@ public class ProductController {
 	 * 更新時
 	 */
 	@RequestMapping(value = "/update", params = "update", method = RequestMethod.POST)
-	public String update(@Validated @ModelAttribute("productForm") ProductForm pForm, BindingResult bindingResult ,Model model) {
+	public String update(@Validated @ModelAttribute("productForm") ProductUpdateForm updateForm, BindingResult bindingResult , Model model) {
 		if(bindingResult.hasErrors()) {
 			return "/updateInput";
 		}
 		// 存在チェック
-		var product = productService.findByProductCode(pForm.getProductCode(), pForm.getId());
-		if(product != null) {
+		var product = productService.findByProductCode(updateForm.getProductCode());
+		if(product != null && product.id().value() == updateForm.getId()) {
 			model.addAttribute("errorMsg", "商品コードは既に使用されています。");
-			model.addAttribute("categoryList", categoryService.findAll());
+			model.addAttribute("categoryList", this.getCategoryList());
 			return "/updateInput";
 		}
-		product = this.FormToProduct(pForm);
 
-		productService.update(product);
+		productService.update(updateForm.toProduct());
 
 		return "/success";
 	}
@@ -138,38 +140,27 @@ public class ProductController {
 	 * 更新画面への遷移
 	 */
 	@GetMapping("/updateInput/{id}")
-	public String updateInput(@ModelAttribute("productForm") ProductForm pForm, @PathVariable("id") int id, Model model) {
+	public String updateInput(@ModelAttribute("productForm") ProductUpdateForm updateForm, @PathVariable("id") int id, Model model) {
 		var product = productService.findById(id);
-		pForm.setId(product.id().value());
-		pForm.setName(product.name().value());
-		pForm.setPrice(product.price().value());
-		pForm.setProductCode(product.productCode().value());
-		pForm.setCategoryId(product.category().id().value());
-		pForm.setDescription(product.description().value());
+		updateForm.setId(product.id().value());
+		updateForm.setName(product.name().value());
+		updateForm.setPrice(product.price().value());
+		updateForm.setProductCode(product.productCode().value());
+		updateForm.setCategoryId(product.category().id().value());
+		updateForm.setDescription(product.description().value());
 
-		var categoryList = categoryService.findAll().stream().map(category -> {
+		model.addAttribute("categoryList", this.getCategoryList());
+		
+		return "updateInput";
+	}
+
+	private List<CategorySelectView> getCategoryList() {
+		return categoryService.findAll().stream().map(category -> {
 			return new CategorySelectView(
 					category.id().value(),
 					category.name().value()
 			);
 		}).toList();
-		model.addAttribute("categoryList", categoryList);
-		
-		return "updateInput";
-	}
-	
-	private Product FormToProduct(ProductForm pForm) {
-		return new Product(
-				new ProductId(pForm.getId()),
-				new ProductCode(pForm.getProductCode()),
-				new ProductName(pForm.getName()),
-				new Price(pForm.getPrice()),
-				new Description(pForm.getDescription()),
-				new Category(
-						new CategoryId(pForm.getCategoryId()),
-						new CategoryName("")
-				)
-		);
 	}
 	
 }

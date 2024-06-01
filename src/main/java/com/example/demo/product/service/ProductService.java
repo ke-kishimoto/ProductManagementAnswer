@@ -1,9 +1,13 @@
 package com.example.demo.product.service;
 
+import com.example.demo.category.entity.Category;
+import com.example.demo.category.vo.CategoryId;
+import com.example.demo.category.vo.CategoryName;
 import com.example.demo.product.entity.Product;
 import com.example.demo.product.repository.record.ProductRecord;
 import com.example.demo.product.repository.record.ProductRecordFactory;
 import com.example.demo.product.repository.ProductRepository;
+import com.example.demo.product.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,8 +54,22 @@ public class ProductService {
         return productRepository.update(productRecord);
     }
 
-    public Product findByProductCode(String productCode, int id) {
-        return productRepository.findByProductCode(productCode, id);
+    public Product findByProductCode(String productCode) {
+        var productRecord = productRepository.findByProductCode(productCode);
+        if(productRecord != null) {
+            return new Product(
+                new ProductId(productRecord.id()),
+                new ProductCode(productRecord.productCode()),
+                    new ProductName(productRecord.name()),
+                    new Price(productRecord.price()),
+                    new Description(productRecord.description()),
+                    new Category(
+                            new CategoryId(productRecord.categoryId()),
+                            new CategoryName(productRecord.categoryName())
+                            )
+            );
+        }
+        return null;
     }
 
 }

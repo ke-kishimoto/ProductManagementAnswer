@@ -1,6 +1,5 @@
 package com.example.demo.product.repository;
 
-import com.example.demo.product.entity.Product;
 import com.example.demo.product.repository.record.ProductRecord;
 
 import java.util.List;
@@ -17,5 +16,5 @@ public interface ProductRepository {
 
     int update(ProductRecord p);
 
-    Product findByProductCode(String productCode, int id);
+    ProductRecord findByProductCode(String productCode);
 }

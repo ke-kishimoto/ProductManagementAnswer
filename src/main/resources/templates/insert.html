@@ -49,6 +49,9 @@
               th:value="${category.id}" th:text="${category.name}">
               </option>
             </select>
+            <span class="error" th:each="error: ${#fields.errors('categoryId')}">
+            	[[ ${error} ]]
+            </span>
           </div>
           <div>
             <label>商品説明</label>

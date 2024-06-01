@@ -1,9 +1,7 @@
 package com.example.demo.product.repository;
 
-import com.example.demo.product.entity.Product;
 import com.example.demo.product.repository.record.ProductRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -20,16 +18,7 @@ public class DataClassProductRepository implements ProductRepository {
 	public List<ProductRecord> find(String keyword) {
 		
 		String sql = """
-				select p.id
-				, p.product_code
-				, p.name
-				, c.id category_id
-				, c.name category_name
-				, p.price
-				, p.image_path
-				, p.description
-				, p.created_at
-				, p.updated_at
+				select p.*, c.name category_name
 				from products p
 				join categories c
 				on p.category_id = c.id
@@ -42,7 +31,13 @@ public class DataClassProductRepository implements ProductRepository {
 	}
 	
 	public ProductRecord findById(int id) {
-		String sql = "select p.*, c.name AS category_name from products p join categories c on p.category_id = c.id where p.id = :id";
+		String sql = """
+				select p.*, c.name AS category_name
+				from products p
+				join categories c
+				on p.category_id = c.id
+				where p.id = :id
+				""";
 		MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("id", id);
         var list = jdbcTemplate.query(sql, param, new DataClassRowMapper<>(ProductRecord.class));
@@ -51,13 +46,14 @@ public class DataClassProductRepository implements ProductRepository {
 	
 	public int insert(ProductRecord p) {
 		String sql = """
-				insert into products (product_code, name, price, category_id, created_at)
-				values (:product_code, :name, :price, :category_id, now())
+				insert into products (product_code, name, price, category_id, description, created_at)
+				values (:product_code, :name, :price,:category_id, :description, now())
 				""";
 		MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("product_code", p.productCode());
         param.addValue("name", p.name());
-        param.addValue("price", p.price());
+		param.addValue("price", p.price());
+		param.addValue("description", p.description());
         param.addValue("category_id", p.categoryId());
         
         return jdbcTemplate.update(sql, param);
@@ -90,15 +86,17 @@ public class DataClassProductRepository implements ProductRepository {
 		
 	}
 	
-	public Product findByProductCode(String productCode, int id) {
-		String sql = "select * from products where product_code = :product_code ";
-		if (id > 0) {
-			sql += "and id <> :id";
-		}
+	public ProductRecord findByProductCode(String productCode) {
+		String sql = """
+			select p.*, c.name AS category_name
+			from products p
+			join categories c
+			on p.category_id = c.id
+			where product_code = :product_code
+		""";
 		MapSqlParameterSource param = new MapSqlParameterSource();
 		param.addValue("product_code", productCode);
-		param.addValue("id", id);
-		var list = jdbcTemplate.query(sql, param, new BeanPropertyRowMapper<>(Product.class));
+		var list = jdbcTemplate.query(sql, param, new DataClassRowMapper<>(ProductRecord.class));
         return list.isEmpty() ? null : list.getFirst();
 	}
 }

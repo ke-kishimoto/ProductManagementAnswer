@@ -3,7 +3,13 @@ package com.example.demo.product.controller;
 
 import com.example.demo.category.entity.Category;
 import com.example.demo.category.service.CategoryService;
+import com.example.demo.category.view.CategorySelectView;
+import com.example.demo.category.vo.CategoryId;
+import com.example.demo.category.vo.CategoryName;
+import com.example.demo.product.controller.view.ProductDetailView;
+import com.example.demo.product.controller.view.ProductListView;
 import com.example.demo.product.service.ProductService;
+import com.example.demo.product.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.product.entity.Product;
-import com.example.demo.product.form.ProductForm;
+import com.example.demo.product.controller.form.ProductForm;
 
 @Controller
 public class ProductController {
@@ -34,7 +40,16 @@ public class ProductController {
 	 */
 	@RequestMapping(value = "/menu")
 	public String menu(@RequestParam(value = "keyword", defaultValue = "") String keyword, Model model) {
-		model.addAttribute("productList", productService.find(keyword));
+		var productViewList = productService.find(keyword).stream().map(product -> {
+			return new ProductListView(
+					product.id().value(),
+					product.productCode().value(),
+					product.name().value(),
+					product.price().value(),
+					product.category().name().value()
+			);
+		}).toList();
+		model.addAttribute("productList", productViewList);
 		return "menu";
 	}
 	
@@ -96,7 +111,17 @@ public class ProductController {
 	 */
 	@GetMapping("/detail/{id}")
 	public String detail(@PathVariable("id") int id, Model model) {
-		model.addAttribute("product", productService.findById(id));
+		var product = productService.findById(id);
+		var productDetail = new ProductDetailView(
+			product.id().value(),
+			product.productCode().value(),
+			product.name().value(),
+			product.category().id().value(),
+			product.price().value(),
+			product.description().value(),
+			""
+		);
+		model.addAttribute("product", productDetail);
 		return "detail";
 	}
 
@@ -115,26 +140,35 @@ public class ProductController {
 	@GetMapping("/updateInput/{id}")
 	public String updateInput(@ModelAttribute("productForm") ProductForm pForm, @PathVariable("id") int id, Model model) {
 		var product = productService.findById(id);
-		pForm.setId(product.id());
-		pForm.setName(product.name());
-		pForm.setPrice(product.price());
-		pForm.setProductCode(product.productCode());
-		pForm.setCategoryId(product.category().id());
-		pForm.setDescription(product.description());
+		pForm.setId(product.id().value());
+		pForm.setName(product.name().value());
+		pForm.setPrice(product.price().value());
+		pForm.setProductCode(product.productCode().value());
+		pForm.setCategoryId(product.category().id().value());
+		pForm.setDescription(product.description().value());
 
-		model.addAttribute("categoryList", categoryService.findAll());
+		var categoryList = categoryService.findAll().stream().map(category -> {
+			return new CategorySelectView(
+					category.id().value(),
+					category.name().value()
+			);
+		}).toList();
+		model.addAttribute("categoryList", categoryList);
 		
 		return "updateInput";
 	}
 	
 	private Product FormToProduct(ProductForm pForm) {
 		return new Product(
-				pForm.getId(),
-				pForm.getProductCode(),
-				pForm.getName(),
-				pForm.getPrice(),
-				pForm.getDescription(),
-				new Category(pForm.getCategoryId(), "")
+				new ProductId(pForm.getId()),
+				new ProductCode(pForm.getProductCode()),
+				new ProductName(pForm.getName()),
+				new Price(pForm.getPrice()),
+				new Description(pForm.getDescription()),
+				new Category(
+						new CategoryId(pForm.getCategoryId()),
+						new CategoryName("")
+				)
 		);
 	}
 	

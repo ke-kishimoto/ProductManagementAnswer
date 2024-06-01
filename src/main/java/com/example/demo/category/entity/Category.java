@@ -1,3 +1,6 @@
 package com.example.demo.category.entity;
 
-public record Category(int id, String name){}
+import com.example.demo.category.vo.CategoryId;
+import com.example.demo.category.vo.CategoryName;
+
+public record Category(CategoryId id, CategoryName name){}

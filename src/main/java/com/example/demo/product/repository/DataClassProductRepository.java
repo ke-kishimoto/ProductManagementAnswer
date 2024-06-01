@@ -1,7 +1,7 @@
 package com.example.demo.product.repository;
 
 import com.example.demo.product.entity.Product;
-import com.example.demo.product.record.ProductRecord;
+import com.example.demo.product.repository.record.ProductRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.DataClassRowMapper;

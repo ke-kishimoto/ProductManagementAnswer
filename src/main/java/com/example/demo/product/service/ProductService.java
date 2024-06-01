@@ -1,7 +1,8 @@
 package com.example.demo.product.service;
 
 import com.example.demo.product.entity.Product;
-import com.example.demo.product.record.ProductRecord;
+import com.example.demo.product.repository.record.ProductRecord;
+import com.example.demo.product.repository.record.ProductRecordFactory;
 import com.example.demo.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,34 +23,35 @@ public class ProductService {
         return productRepository.findById(id).toProduct();
     }
 
-    public int insert(Product p) {
-        return productRepository.insert(toProductRecord(p));
+    public int insert(Product product) {
+        var productRecord = ProductRecordFactory.createInsertProductRecord(
+                product.productCode(),
+                product.name(),
+                product.category().id(),
+                product.price(),
+                product.description()
+        );
+        return productRepository.insert(productRecord);
     }
 
     public int delete(int id) {
         return productRepository.delete(id);
     }
 
-    public int update(Product p) {
-        return productRepository.update(toProductRecord(p));
+    public int update(Product product) {
+        var productRecord = ProductRecordFactory.createUpdateProductRecord(
+                product.id(),
+                product.productCode(),
+                product.name(),
+                product.category().id(),
+                product.price(),
+                product.description()
+        );
+        return productRepository.update(productRecord);
     }
 
     public Product findByProductCode(String productCode, int id) {
         return productRepository.findByProductCode(productCode, id);
     }
 
-    private ProductRecord toProductRecord(Product p) {
-        return new ProductRecord(
-                p.id(),
-                p.productCode(),
-                p.name(),
-                p.category().id(),
-                p.category().name(),
-                p.price(),
-                null,
-                p.description(),
-                null,
-                null
-        );
-    }
 }

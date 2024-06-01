@@ -1,7 +1,7 @@
 package com.example.demo.product.repository;
 
 import com.example.demo.product.entity.Product;
-import com.example.demo.product.record.ProductRecord;
+import com.example.demo.product.repository.record.ProductRecord;
 
 import java.util.List;
 

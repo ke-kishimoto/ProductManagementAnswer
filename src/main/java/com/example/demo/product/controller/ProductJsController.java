@@ -1,6 +1,6 @@
 package com.example.demo.product.controller;
 
-import com.example.demo.product.form.ProductForm;
+import com.example.demo.product.controller.form.ProductForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

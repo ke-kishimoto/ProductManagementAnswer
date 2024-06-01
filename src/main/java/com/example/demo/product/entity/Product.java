@@ -2,6 +2,13 @@ package com.example.demo.product.entity;
 
 
 import com.example.demo.category.entity.Category;
+import com.example.demo.product.vo.*;
 
-public record Product(int id, String productCode, String name, Integer price, String description, Category category) {
-}
+public record Product(
+        ProductId id,
+        ProductCode productCode,
+        ProductName name,
+        Price price,
+        Description description,
+        Category category
+) { }

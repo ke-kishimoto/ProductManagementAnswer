@@ -1,4 +1,4 @@
-package com.example.demo.product.form;
+package com.example.demo.product.controller.form;
 
 
 import jakarta.validation.constraints.NotBlank;

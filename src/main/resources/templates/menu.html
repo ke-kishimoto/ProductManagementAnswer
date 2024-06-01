@@ -14,15 +14,15 @@
     <div class="btn"><a class="basic_btn regist" href="/insert">新規登録</a></div>
     <div class="btn"><a class="basic_btn regist" href="/menu2">JS版メニュー</a></div>
     <p th:text="${msg}"></p>
-    <form method="get" action="search" class="search_container">
+    <form method="get" action="menu" class="search_container">
       <input type="text" size="25" name="keyword" placeholder="キーワード検索">
       <input type="submit" value="&#xf002">
     </form>
 
     <table>
-        <div class="caption"><p>検索結果：10件</p></div>
+        <div class="caption"><p>検索結果：[[ ${productList.size()} ]]件</p></div>
         <div class="order">
-          <select class="base-text" v-model="selected" @change="selectedOrdrBy">
+          <select class="base-text">
             <option>並び替え</option>
             <option value="product_code">商品コード</option>
             <option value="category_id">カテゴリ</option>

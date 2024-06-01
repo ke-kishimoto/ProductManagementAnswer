@@ -33,24 +33,7 @@ public class ProductController {
 	 * メニュー画面への遷移
 	 */
 	@RequestMapping(value = "/menu")
-	public String menu(Model model) {
-		model.addAttribute("productList", productService.find(""));
-		return "menu";
-	}
-	
-	/*
-	 * メニュー画面2への遷移
-	 */
-	@RequestMapping(value = "/menu2")
-	public String menu2(Model model) {
-		return "menu2";
-	}
-	
-	/*
-	 * 検索ボタン押下時
-	 */
-	@RequestMapping(value = "/search")
-	public String search(@RequestParam("keyword") String keyword ,Model model) {
+	public String menu(@RequestParam(value = "keyword", defaultValue = "") String keyword, Model model) {
 		model.addAttribute("productList", productService.find(keyword));
 		return "menu";
 	}
@@ -64,15 +47,7 @@ public class ProductController {
 		model.addAttribute("categoryList", categoryList);
 		return "insert";
 	}
-	
-	/*
-	 * 新規登録画面2への遷移
-	 */
-	@GetMapping("/insert2")
-	public String insert2(@ModelAttribute("productForm") ProductForm pForm, Model model) {
-		return "insert2";
-	}
-	
+
 	/*
 	 * 新規登録時
 	 */
@@ -89,12 +64,9 @@ public class ProductController {
 		}
 		
 		product = this.FormToProduct(pForm);
-		var count = productService.insert(product);
-		this.setMsg(model, "登録", count);
-		
-		model.addAttribute("productList", productService.find(""));
-		
-		return "menu";
+		productService.insert(product);
+
+		return "/success";
 	}
 	
 	/*
@@ -114,12 +86,9 @@ public class ProductController {
 		}
 		product = this.FormToProduct(pForm);
 
-		var count = productService.update(product);
-		this.setMsg(model, "更新", count);
-		
-		model.addAttribute("productList", productService.find(""));
-		
-		return "/menu";
+		productService.update(product);
+
+		return "/success";
 	}
 	
 	/*
@@ -130,24 +99,14 @@ public class ProductController {
 		model.addAttribute("product", productService.findById(id));
 		return "detail";
 	}
-	
-	/*
-	 * 詳細画面2への遷移
-	 */
-	@GetMapping("/detail2")
-	public String detail2() {
-		return "detail2";
-	}
-	
+
 	/*
 	 * 削除時
 	 */
 	@RequestMapping(value = "/update", params = "delete", method = RequestMethod.POST)
 	public String delete(@RequestParam("id") int id, Model model) {
-		var count = productService.delete(id);
-		this.setMsg(model, "削除", count);
-		model.addAttribute("productList", productService.find(""));
-		return "menu";
+		productService.delete(id);
+		return "/success";
 	}
 	
 	/*
@@ -177,14 +136,6 @@ public class ProductController {
 				pForm.getDescription(),
 				new Category(pForm.getCategoryId(), "")
 		);
-	}
-	
-	private void setMsg(Model model, String mode, int count) {
-		if(count == 0) {
-			model.addAttribute("msg", mode + "に失敗しました。");
-		} else {
-			model.addAttribute("msg", mode + "に成功しました。");
-		}
 	}
 	
 }

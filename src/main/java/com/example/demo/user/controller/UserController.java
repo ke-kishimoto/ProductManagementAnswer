@@ -39,7 +39,7 @@ public class UserController {
     @RequestMapping(value="/logout")
     public String logout(@ModelAttribute("loginForm") LoginForm loginForm) {
         session.invalidate();
-        return "index";
+        return "redirect:/index";
     }
 
     /*
@@ -56,7 +56,6 @@ public class UserController {
             return "/index";
         }
         session.setAttribute("user", user);
-        model.addAttribute("productList", productService.find(""));
-        return "menu";
+        return "redirect:/menu";
     }
 }

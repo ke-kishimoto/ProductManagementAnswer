@@ -5,8 +5,12 @@ import com.example.demo.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * 自前でのログイン処理
+ */
+
 @Service
-public class UserService {
+public class RegularUserService {
 
     @Autowired
     private UserRepository userRepository;

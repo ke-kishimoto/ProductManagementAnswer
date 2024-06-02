@@ -1,9 +1,10 @@
 
 -- users
+-- password - "password"
 -- delete from users;
-insert into users(login_id, password, name, role) values('admin', 'admin','システム管理者', 1);
-insert into users(login_id, password, name, role) values('sato', 'pass01','佐藤', 2);
-insert into users(login_id, password, name, role) values('suzuki', 'pass02','鈴木', 2);
+insert into users(login_id, password, name, role) values('admin', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW','システム管理者', 1);
+insert into users(login_id, password, name, role) values('sato', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW','佐藤', 2);
+insert into users(login_id, password, name, role) values('suzuki', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW','鈴木', 2);
 
 -- categories
 -- delete from categories;

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>ログイン</title>
-<link href="css/commons.css" rel="stylesheet">
+<link href="/css/commons.css" rel="stylesheet">
 </head>
 <body class="login_body">
   <div class="header">
@@ -14,21 +14,17 @@
     <img src="./images/logo.png" class="login_logo">
     <p class="error" th:text="${errorMsg}"></p>
 
-    <form action="/login" method="post" th:object="${loginForm}">
+    <form th:action="@{/login}" method="post">
       <fieldset>
+        <div th:if="${param.error}">
+          IDまたはパスワードが違います</div>
         <div class="cp_iptxt">
-          <input class="base_input" type="text" th:field="*{loginId}" placeholder="ID">
+          <input class="base_input" name="username" type="text" placeholder="ID">
           <i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i>
-          <div class="error" th:each="error: ${#fields.errors('loginId')}">
-          	[[ ${error} ]]
-          </div>
         </div>
 
         <div>
-          <input class="base_input" type="password" th:field="*{password}" placeholder="PASS">
-          <div class="error" th:each="error: ${#fields.errors('password')}">
-          [[ ${error} ]]
-          </div>
+          <input class="base_input" name="password" type="password" placeholder="PASS">
         </div>
       </fieldset>
       <button class="logout_btn" type="submit">ログイン</button>

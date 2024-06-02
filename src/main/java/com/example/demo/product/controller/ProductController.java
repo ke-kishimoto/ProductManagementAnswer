@@ -1,16 +1,11 @@
 package com.example.demo.product.controller;
 
-
-import com.example.demo.category.entity.Category;
 import com.example.demo.category.service.CategoryService;
 import com.example.demo.category.view.CategorySelectView;
-import com.example.demo.category.vo.CategoryId;
-import com.example.demo.category.vo.CategoryName;
 import com.example.demo.product.controller.form.ProductInsertForm;
 import com.example.demo.product.controller.view.ProductDetailView;
 import com.example.demo.product.controller.view.ProductListView;
 import com.example.demo.product.service.ProductService;
-import com.example.demo.product.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.product.entity.Product;
 import com.example.demo.product.controller.form.ProductUpdateForm;
 
 import java.util.List;

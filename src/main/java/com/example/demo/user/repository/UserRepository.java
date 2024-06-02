@@ -5,4 +5,6 @@ import com.example.demo.user.record.UserRecord;
 public interface UserRepository {
 
     UserRecord login(String loginId, String password);
+
+    UserRecord findByLoginId(String loginId);
 }

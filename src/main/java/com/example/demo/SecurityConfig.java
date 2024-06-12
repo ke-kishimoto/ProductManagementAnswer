@@ -20,6 +20,8 @@ public class SecurityConfig {
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/", "/login").permitAll()
+//                        .requestMatchers("/").hasRole("ADMIN")
+//                        .requestMatchers("/").hasRole("USER")
                         .anyRequest().authenticated()
                 ).logout(logout -> logout
                         .logoutSuccessUrl("/")

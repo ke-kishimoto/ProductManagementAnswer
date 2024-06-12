@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
 <meta charset="UTF-8">
 <title>メニュー</title>
@@ -10,6 +13,9 @@
   <div id="app">
 
     <div th:insert="header"></div>
+
+    <p sec:authorize="hasRole('ROLE_ADMIN')">ADMIN</p>
+    <p sec:authorize="hasRole('ROLE_USER')">USER</p>
 
     <div class="btn"><a class="basic_btn regist" href="/insert">新規登録</a></div>
     <div class="btn"><a class="basic_btn regist" href="/menu2">JS版メニュー</a></div>

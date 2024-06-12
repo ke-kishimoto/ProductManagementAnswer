@@ -10,5 +10,6 @@ public record Product(
         ProductName name,
         Price price,
         Description description,
+        Image image,
         Category category
 ) { }

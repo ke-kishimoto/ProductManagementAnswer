@@ -46,14 +46,15 @@ public class DataClassProductRepository implements ProductRepository {
 	
 	public int insert(ProductRecord p) {
 		String sql = """
-				insert into products (product_code, name, price, category_id, description, created_at)
-				values (:product_code, :name, :price,:category_id, :description, now())
+				insert into products (product_code, name, price, category_id, description, image, created_at)
+				values (:product_code, :name, :price,:category_id, :description, :image, now())
 				""";
 		MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("product_code", p.productCode());
         param.addValue("name", p.name());
 		param.addValue("price", p.price());
 		param.addValue("description", p.description());
+		param.addValue("image", p.image());
         param.addValue("category_id", p.categoryId());
         
         return jdbcTemplate.update(sql, param);

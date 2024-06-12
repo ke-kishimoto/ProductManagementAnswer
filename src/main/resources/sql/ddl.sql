@@ -26,7 +26,7 @@ create table products(
     , category_id int not null
     , name varchar(255) not null
     , price int
-    , image_path varchar(255)
+    , image varchar(255)
     , description varchar(2000)
     , created_at timestamp
     , updated_at timestamp

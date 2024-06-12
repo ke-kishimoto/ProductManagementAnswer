@@ -33,7 +33,8 @@ public class ProductService {
                 product.name(),
                 product.category().id(),
                 product.price(),
-                product.description()
+                product.description(),
+                product.image()
         );
         return productRepository.insert(productRecord);
     }
@@ -63,6 +64,7 @@ public class ProductService {
                     new ProductName(productRecord.name()),
                     new Price(productRecord.price()),
                     new Description(productRecord.description()),
+                    new Image(productRecord.image()),
                     new Category(
                             new CategoryId(productRecord.categoryId()),
                             new CategoryName(productRecord.categoryName())

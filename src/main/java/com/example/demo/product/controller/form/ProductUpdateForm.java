@@ -10,6 +10,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Base64;
 
 @Data
 @AllArgsConstructor
@@ -25,14 +29,16 @@ public class ProductUpdateForm {
 	@NotNull
 	private Integer categoryId;
 	private String description;
+	private MultipartFile imageFile;
 
-	public Product toProduct() {
+	public Product toProduct() throws IOException {
 		return new Product(
 				new ProductId(this.getId()),
 				new ProductCode(this.getProductCode()),
 				new ProductName(this.getName()),
 				new Price(this.getPrice()),
 				new Description(this.getDescription()),
+				new Image(Base64.getEncoder().encodeToString(this.getImageFile().getBytes())),
 				new Category(
 						new CategoryId(this.getCategoryId()),
 						new CategoryName("")

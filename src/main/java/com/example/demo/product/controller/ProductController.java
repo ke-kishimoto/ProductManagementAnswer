@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.product.controller.form.ProductUpdateForm;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -76,9 +77,16 @@ public class ProductController {
 			return "/insert";
 		}
 
-		productService.insert(insertForm.toProduct());
 
-		return "/success";
+        try {
+            productService.insert(insertForm.toProduct());
+        } catch (IOException e) {
+			model.addAttribute("errorMsg", "ファイルの保存に失敗しました。");
+			model.addAttribute("categoryList", this.getCategoryList());
+			return "/insert";
+        }
+
+        return "/success";
 	}
 	
 	/*
@@ -97,9 +105,15 @@ public class ProductController {
 			return "/updateInput";
 		}
 
-		productService.update(updateForm.toProduct());
+        try {
+            productService.update(updateForm.toProduct());
+        } catch (IOException e) {
+			model.addAttribute("errorMsg", "商品コードは既に使用されています。");
+			model.addAttribute("categoryList", this.getCategoryList());
+			return "/updateInput";
+        }
 
-		return "/success";
+        return "/success";
 	}
 	
 	/*

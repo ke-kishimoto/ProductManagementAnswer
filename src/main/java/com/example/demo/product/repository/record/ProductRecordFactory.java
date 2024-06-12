@@ -10,7 +10,8 @@ public class ProductRecordFactory {
             ProductName name,
             CategoryId categoryId,
             Price price,
-            Description description
+            Description description,
+            Image image
     ) {
         return new ProductRecord(
                 0,
@@ -19,7 +20,7 @@ public class ProductRecordFactory {
                 categoryId.value(),
                 "",
                 price.value(),
-                "",
+                image.base64Data(),
                 description.value(),
                 null,
                 null

@@ -12,7 +12,7 @@
   <div class="update">
     <div class="form_body">
       <div class="img_block">
-        <img src="images/マッキー.png" class="product_img"><br>
+        <img th:src="'data:image/png;base64,' + ${product.image}" class="product_img"><br>
       </div>
       <form action="/update" method="post">
       <input type="hidden" name="id" th:value="${product.id}">

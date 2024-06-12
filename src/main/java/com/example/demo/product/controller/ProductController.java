@@ -129,7 +129,7 @@ public class ProductController {
 			product.category().id().value(),
 			product.price().value(),
 			product.description().value(),
-			""
+			product.image().base64Data()
 		);
 		model.addAttribute("product", productDetail);
 		return "detail";

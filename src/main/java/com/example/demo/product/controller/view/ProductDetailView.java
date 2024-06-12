@@ -7,6 +7,6 @@ public record ProductDetailView(
         int categoryId,
         int price,
         String description,
-        String imagePath
+        String image
 ) {
 }

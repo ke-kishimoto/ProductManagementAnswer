@@ -16,7 +16,7 @@ public class RoleService {
         var roleRecord = roleRepository.findById(id);
         return new Role(
                 new RoleId(roleRecord.id()),
-                new RoleName(roleRecord.name())
+                RoleName.fromValue(roleRecord.name())
         );
     }
 }

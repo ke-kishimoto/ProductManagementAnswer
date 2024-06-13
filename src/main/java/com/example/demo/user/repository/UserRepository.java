@@ -1,6 +1,6 @@
 package com.example.demo.user.repository;
 
-import com.example.demo.user.record.UserRecord;
+import com.example.demo.user.repository.record.UserRecord;
 
 public interface UserRepository {
 

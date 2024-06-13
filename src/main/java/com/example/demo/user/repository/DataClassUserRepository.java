@@ -1,11 +1,10 @@
 package com.example.demo.user.repository;
 
-import com.example.demo.user.record.UserRecord;
+import com.example.demo.user.repository.record.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 
 @Repository

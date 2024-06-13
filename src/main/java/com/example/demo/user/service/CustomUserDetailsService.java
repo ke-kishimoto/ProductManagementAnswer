@@ -1,5 +1,6 @@
 package com.example.demo.user.service;
 
+import com.example.demo.role.repository.RoleRepository;
 import com.example.demo.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Spring Security用
@@ -20,6 +22,8 @@ import java.util.Collection;
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -28,10 +32,11 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with login id: " + username);
         }
 
-        return new org.springframework.security.core.userdetails.User(user.loginId(), user.password(), getAuthorities());
+        return new org.springframework.security.core.userdetails.User(user.loginId(), user.password(), getAuthorities(user.roleId()));
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+    private Collection<? extends GrantedAuthority> getAuthorities(Integer roleId) {
+        var role = roleRepository.findById(roleId);
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 }
